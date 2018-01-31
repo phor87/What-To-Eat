@@ -25,9 +25,14 @@ def whatWeNeed(pick):
 
 def addIngredient(stuff):
     """ add an ingredient to the list """
-    if stuff not in ingredient:
+    if stuff == '':
+        print('Nothing to add.')
+    elif stuff not in ingredient:
         ingredient.append(stuff)
         print(stuff, 'added to ingredient.')
+        thefile = open('ingredients.txt', 'w')
+        for item in ingredient:
+            thefile.write("%s\n" % item)
     elif stuff in ingredient:
         print(stuff, 'is already in ingredient.')
 
