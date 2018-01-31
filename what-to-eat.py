@@ -92,3 +92,9 @@ def list_recipes():
     """ list recipes from dictionary """
     for recipe in recipes_dict:
         print(recipe)
+
+
+def list_ingredients():
+    """ list ingredients from list """
+    for items in ingredients_list:
+        print(items)
