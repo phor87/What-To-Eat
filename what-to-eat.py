@@ -5,13 +5,14 @@ ingredients_list = open('ingredients.txt').read().splitlines()
 
 
 def update_list():
+    """ update ingredients list """
     the_file = open('ingredients.txt', 'w')
     for item in ingredients_list:
         the_file.write("%s\n" % item)
 
 
 def have(ingredient=None):
-    """ prints a list of meal available if all ingredients is present.
+    """ prints a list of recipes available if all ingredients is present.
         or prints what recipes has an ingredient."""
     a_list = []
     if ingredient is None:
@@ -58,7 +59,7 @@ def remove(ingredient):
 
 
 def eat(something):
-    """ check if stuff is available or prints a list of ingredients needed """
+    """ check if something is available or prints a list of ingredients needed """
     if set(recipes_dict[something]).issubset(ingredients_list):
         print('We can eat', something)
     else:  # prints what ingredients are needed
