@@ -1,0 +1,8 @@
+egg
+ramen
+mushroom
+broccoli
+frozen pizza
+butter
+cheese
+bread
