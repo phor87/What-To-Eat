@@ -1,72 +1,93 @@
 import pickle
 
-meal = pickle.load(open("meal.pickle", "rb"))
-
-ingredient = open('ingredients.txt').read().splitlines()
-
-
-def whatWeHave():
-    """ prints a list of meal available if all ingredients is present """
-    wehave = []
-    for meals, ingredients in meal.items():
-        if set(ingredients).issubset(ingredient):
-            wehave.append(meals)
-    print('We have', wehave)
+recipes_dict = pickle.load(open("recipes.pickle", "rb"))
+ingredients_list = open('ingredients.txt').read().splitlines()
 
 
-def whatWeNeed(pick):
-    """ prints what is needed from meal pick """
-    weneed = []
-    for items in meal[pick]:
-        if items not in ingredient:
-            weneed.append(items)
-    print('For', pick, 'we need', weneed)
+def update_list():
+    the_file = open('ingredients.txt', 'w')
+    for item in ingredients_list:
+        the_file.write("%s\n" % item)
 
 
-def addIngredient(stuff):
-    """ add an ingredient to the list """
-    if stuff == '':
-        print('Nothing to add.')
-    elif stuff not in ingredient:
-        ingredient.append(stuff)
-        print(stuff, 'added to ingredient.')
-        thefile = open('ingredients.txt', 'w')
-        for item in ingredient:
-            thefile.write("%s\n" % item)
-    elif stuff in ingredient:
-        print(stuff, 'is already in ingredient.')
-
-
-def removeIngredient(stuff):
-    """ remove an ingredient from the list """
-    if stuff in ingredient:
-        ingredient.remove(stuff)
-        print(stuff, 'was removed from ingredient.')
-    elif stuff not in ingredient:
-        print(stuff, 'is not in ingredient.')
-
-
-def eat(stuff):
-    """ check if stuff is available or prints a list of ingredients needed """
-    if set(meal[stuff]).issubset(ingredient):
-        print('We can eat', stuff)
+def have(ingredient=None):
+    """ prints a list of meal available if all ingredients is present.
+        or prints what recipes has an ingredient."""
+    a_list = []
+    if ingredient is None:
+        for recipe, ingredient in recipes_dict.items():
+            if set(ingredient).issubset(ingredients_list):
+                a_list.append(recipe)
+        if not a_list:
+            print('We have nothing.')
+        else:
+            print('We have', a_list)
     else:
-        whatWeNeed(stuff)
+        for item in recipes_dict:
+            if ingredient in recipes_dict[item]:
+                a_list.append(item)
+        if not a_list:
+            print('Nothing has', ingredient, 'in it.')
+        else:
+            print('These have', ingredient, 'in it.', a_list)
 
 
-def shoppingList():
+def add(ingredient):
+    """ add an ingredient to the list """
+    ingredient = ingredient.lower()
+    if ingredient == '':
+        print('Nothing to add.')
+    elif ingredient not in ingredients_list:
+        ingredients_list.append(ingredient)
+        print(ingredient, 'added to ingredients list.')
+        update_list()
+    elif ingredient in ingredients_list:
+        print(ingredient, 'is already in ingredients list.')
+
+
+def remove(ingredient):
+    """ remove an ingredient from the list """
+    if ingredient == '':
+        print('Nothing to add.')
+    if ingredient in ingredients_list:
+        ingredients_list.remove(ingredient)
+        print(ingredient, 'was removed from ingredients list.')
+        update_list()
+    elif ingredient not in ingredients_list:
+        print(ingredient, 'is not in the ingredients list.')
+
+
+def eat(something):
+    """ check if stuff is available or prints a list of ingredients needed """
+    if set(recipes_dict[something]).issubset(ingredients_list):
+        print('We can eat', something)
+    else:  # prints what ingredients are needed
+        a_list = []
+        for ingredient in recipes_dict[something]:
+            if ingredient not in ingredients_list:
+                a_list.append(ingredient)
+        print('For', something, 'we need', a_list)
+
+
+def shop():
     """ prints a shopping list of ingredients missing in all meals """
-    shopping = []
-    for meals, ingredients in meal.items():
-        if not set(ingredients).issubset(ingredient):
-            for items in ingredients:
-                if items not in ingredient and items not in shopping:
-                    shopping.append(items)
-    print('Shopping list:', shopping)
+    shopping_list = []
+    for recipe, ingredient in recipes_dict.items():
+        if not set(ingredient).issubset(ingredients_list):
+            for items in ingredient:
+                if items not in ingredients_list and items not in shopping_list:
+                    shopping_list.append(items)
+    print('Shopping list:', shopping_list)
 
 
-def saveMeal():
-    """ save meal dictionary """
-    pickle_out = open("meal.pickle", "wb")
-    pickle.dump(meal, pickle_out)
+def save():
+    """ save recipes dictionary """
+    pickle_out = open("recipes.pickle", "wb")
+    pickle.dump(recipes_dict, pickle_out)
     pickle_out.close()
+
+
+def list_recipes():
+    """ list recipes from dictionary """
+    for recipe in recipes_dict:
+        print(recipe)

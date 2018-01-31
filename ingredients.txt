@@ -1,8 +1,11 @@
-egg
-ramen
-mushroom
+tofu
+rice
 broccoli
+egg
+onion
 frozen pizza
-butter
+spinach
+mushroom
+avocado
+ramen
 cheese
-bread
